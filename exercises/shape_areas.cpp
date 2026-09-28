@@ -1,36 +1,46 @@
-#include <iostream>
-#include <iomanip>
+// Shape Areas (Function Overloading)
+// Author: Maria Rodriguez
+// Course: CS002 - Fundamentals of Computer Science
+//
+// Uses overloaded area() functions to compute the area of a circle (from
+// its diameter), a rectangle, a trapezoid, and a triangle (Heron's formula).
+
 #include <cmath>
-using namespace std;
+#include <iomanip>
+#include <iostream>
 
-double area(double a){
-    return (3.14 * ((a*a)/4));
+const double PI = 3.14159265358979323846;
+
+// Circle, given its diameter.
+double area(double diameter) {
+    return PI * diameter * diameter / 4;
 }
 
-double area(int a, int b){
-    return a * b ;
+// Rectangle, given width and height.
+double area(double width, double height) {
+    return width * height;
 }
 
-double area(int a, int b, int c){
-    return (0.5 * a) * (b + c) ;
+// Trapezoid, given its height and the two parallel sides.
+double area(double height, double base1, double base2) {
+    return 0.5 * height * (base1 + base2);
 }
 
-double area(int a, int b, int c, double s){
-    return sqrt(s * (s - a) * (s - b) * (s - c));
+double semiperimeter(double a, double b, double c) {
+    return (a + b + c) / 2;
 }
 
-double semiperimeter(int a, int b, int c){
-    return (a + b + c) * 0.5 ;
+// Triangle, given its three sides and semiperimeter s (Heron's formula).
+double area(double a, double b, double c, double s) {
+    return std::sqrt(s * (s - a) * (s - b) * (s - c));
 }
 
-int main()
-{
-    cout << "area (4)"<< setprecision(4) << area(4) << endl ;
-    cout << "area (4,6) " << setprecision(4) << area(4, 6) << endl ;
-    cout << "area (4 , 6, 8)" << setprecision(4) << area(4, 6, 8) << endl ;
-    cout << "area ( 4,6,8, semiperimeter(4,6,8)"<< setprecision(4) << area(4, 6, 8, semiperimeter(4, 6, 8)) << endl ;
-
+int main() {
+    std::cout << std::fixed << std::setprecision(2);
+    std::cout << "Circle with diameter 4:              " << area(4.0) << '\n';
+    std::cout << "Rectangle 4 x 6:                     " << area(4.0, 6.0) << '\n';
+    std::cout << "Trapezoid height 4, bases 6 and 8:   " << area(4.0, 6.0, 8.0) << '\n';
+    std::cout << "Triangle with sides 4, 6, 8:         "
+              << area(4.0, 6.0, 8.0, semiperimeter(4.0, 6.0, 8.0)) << '\n';
     return 0;
 }
-
-

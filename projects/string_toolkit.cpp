@@ -1,125 +1,115 @@
+// String Toolkit
+// Author: Maria Rodriguez
+// Course: CS002 - Fundamentals of Computer Science (Programming Project 11)
+//
+// A menu-driven program that analyzes and transforms a line of text:
+// count vowels and consonants, convert case, and replace the string.
+
+#include <cctype>
 #include <iostream>
-#include<string>
-#include <cstring>
+#include <string>
 
-using namespace std;
-
-void menu();
-void convertUpper(string str);
-void convertLower(string str);
-int countVowel(string str);
-int countConsonants(string str);
-void newline();
-
-string str;
-
-void menu(){
-    cout << "A) Counting the number of vowels in the string.\n";
-    cout << "B) Counting the number of consonants in the string.\n";
-    cout << "C) Converting the string to all uppercase.\n";
-    cout << "D) Converting the string to all lowercase.\n";
-    cout << "E) Displaying the current string.\n";
-    cout << "F) Enter a new string.\n";
-    cout << "G) Exit the program.\n";
-}
-
-int countVowel(string str)
-{
-    int i=0,sum =0;
-while(str[i]!='\0')
-{
-if(str[i]=='a'||str[i]=='e'||str[i]=='i'||str[i]=='o'||str[i]=='u'||str[i]=='A'||str[i]=='E'||str[i]=='I'||str[i]=='O'||str[i]=='U')
-sum++;
-i++;
-    }
-    return sum;
-}
-
-int countConsonants(string str)
-{
-
- int i=0,consonants =0;
-
-while(str[i]!='\0')
-{
-str[i] = toupper(str[i]);
-if(!(str[i]=='a'||str[i]=='e'||str[i]=='i'||str[i]=='o'||str[i]=='u'||str[i]=='A'||str[i]=='E'||str[i]=='I'||str[i]=='O'||str[i]=='U'))
-consonants++;
-i++;
-}
-    return consonants;
-}
-
-void convertUpper(string str)
-{
-    for (int i = 0; i < str.length(); i++)
-    {
-        str[i] = toupper(str[i]);
-    }
-    cout << str;
-}
-
-void convertLower(string str)
-{
-    for (int i = 0; i < str.length(); i++)
-    {
-        str[i] = tolower(str[i]);
-    }
-    cout << str;
-}
-void newline()
-{
-    char symbol;
-    do
-    {
-        cin.get(symbol);
-    } while (symbol != '\n');
-}
-int main()
-{
-
-char choice = 'F';
-
-cout<<"\nEnter a string : ";
-getline(cin,str);
-
-while (choice!='G')
-{
-    menu();
-cout<<"\nEnter your menu selection : ";
-cin>>choice;
-
-switch(choice)
-{
-case 'A':
-cout << countVowel(str) << " vowels in the string.\n";
-break;
-
-case 'B':
-cout << countConsonants(str) << " consonants in the string.\n";
-break;
-
-case 'C':
-convertUpper(str);
-break;
-
-case 'D':
-convertLower(str);
-break;
-
-case 'E':
-cout << str << endl;
-break;
-
-case 'F':
-    cout<<"Enter new string : "<<endl;
-    cin.ignore();
-    getline(cin,str);
-
- break;
+bool isVowel(char c) {
+    switch (std::tolower(static_cast<unsigned char>(c))) {
+        case 'a': case 'e': case 'i': case 'o': case 'u':
+            return true;
         default:
-            break;
+            return false;
+    }
+}
+
+int countVowels(const std::string& text) {
+    int count = 0;
+    for (char c : text) {
+        if (isVowel(c)) {
+            count++;
         }
     }
+    return count;
 }
 
+// Consonants are letters that are not vowels (spaces, digits and
+// punctuation are not counted).
+int countConsonants(const std::string& text) {
+    int count = 0;
+    for (char c : text) {
+        if (std::isalpha(static_cast<unsigned char>(c)) && !isVowel(c)) {
+            count++;
+        }
+    }
+    return count;
+}
+
+void toUpper(std::string& text) {
+    for (char& c : text) {
+        c = static_cast<char>(std::toupper(static_cast<unsigned char>(c)));
+    }
+}
+
+void toLower(std::string& text) {
+    for (char& c : text) {
+        c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+    }
+}
+
+void showMenu() {
+    std::cout << "\nA) Count the vowels in the string\n"
+              << "B) Count the consonants in the string\n"
+              << "C) Convert the string to uppercase\n"
+              << "D) Convert the string to lowercase\n"
+              << "E) Display the current string\n"
+              << "F) Enter a new string\n"
+              << "G) Exit\n"
+              << "Enter your menu selection: ";
+}
+
+int main() {
+    std::string text;
+    std::cout << "Enter a string: ";
+    std::getline(std::cin, text);
+
+    std::string line;
+    while (true) {
+        showMenu();
+        if (!std::getline(std::cin, line)) {
+            break;
+        }
+        if (line.empty()) {
+            continue;
+        }
+        char choice = static_cast<char>(std::toupper(static_cast<unsigned char>(line[0])));
+        if (choice == 'G') {
+            break;
+        }
+
+        switch (choice) {
+            case 'A':
+                std::cout << "The string has " << countVowels(text) << " vowel(s).\n";
+                break;
+            case 'B':
+                std::cout << "The string has " << countConsonants(text) << " consonant(s).\n";
+                break;
+            case 'C':
+                toUpper(text);
+                std::cout << text << '\n';
+                break;
+            case 'D':
+                toLower(text);
+                std::cout << text << '\n';
+                break;
+            case 'E':
+                std::cout << text << '\n';
+                break;
+            case 'F':
+                std::cout << "Enter a new string: ";
+                std::getline(std::cin, text);
+                break;
+            default:
+                std::cout << "Invalid choice. Please pick A-G.\n";
+                break;
+        }
+    }
+
+    std::cout << "Goodbye!\n";
+    return 0;
+}

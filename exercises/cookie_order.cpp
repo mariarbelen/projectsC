@@ -1,75 +1,53 @@
+// Cookie Order Calculator
+// Author: Maria Rodriguez
+// Course: CS002 - Fundamentals of Computer Science
+//
+// A bakery gives one free cookie for every dozen ordered. Given an order,
+// this program reports the free cookies, how the total packs into dozens
+// plus loose cookies, and how many chocolate chips (10 per cookie) are needed.
+
+#include <cctype>
 #include <iostream>
-using namespace std;
+#include <limits>
+
+const int DOZEN = 12;
+const int CHIPS_PER_COOKIE = 10;
 
 int main() {
-int cookiesOrder;
-int chocoChips;
-int dozenCount;
-int looseCookies;
-int freeCookies;
-int a;
-int c;
-int answer;
+    char again = 'y';
 
-do{
-    
-cout <<"Enter the number of cookies you want to order:";
-cin>> cookiesOrder;
+    while (again == 'y') {
+        int ordered;
+        std::cout << "Enter the number of cookies you want to order: ";
+        if (!(std::cin >> ordered)) {
+            if (std::cin.eof()) {
+                break;
+            }
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Please enter a whole number.\n";
+            continue;
+        }
+        if (ordered < 0) {
+            std::cout << "The order can't be negative.\n";
+            continue;
+        }
 
+        int freeCookies = ordered / DOZEN;
+        int total = ordered + freeCookies;
 
-if (cookiesOrder > 12 ){
-    freeCookies= cookiesOrder / 12; 
+        if (freeCookies > 0) {
+            std::cout << "You also get " << freeCookies << " free cookie(s), one per dozen.\n";
+        }
+        std::cout << "That comes to " << total / DOZEN << " dozen and "
+                  << total % DOZEN << " loose cookie(s).\n"
+                  << "The order needs " << total * CHIPS_PER_COOKIE << " chocolate chips.\n";
 
-
-
-    cout << "You also get " << freeCookies << "free cookies, one per dozen.";
-
-    dozenCount = (freeCookies + cookiesOrder) / 12 ; 
-looseCookies = (freeCookies + cookiesOrder) %  12;
-
-cout<< "That comes up to" << dozenCount<< "and "<< looseCookies << "loose cookie (s)";
-
-chocoChips = (freeCookies + cookiesOrder) * 10;
-
-cout<< "Your total comes up to " << dozenCount<< "\n"
-<< "dozens"<< "\n"
-<< "and " <<"\n"
-<<looseCookies <<"\n"
-"loose cookies"<< endl;
-
-
-cout << "There is a total of " << chocoChips << "chocolate chips "<< endl;
-
-cout<< "Would you like to repeat the calculation: ";
-cin>> answer;
-
-
-
-}
-
-else
-{
-    chocoChips = cookiesOrder *10;
-    dozenCount = 0;
-    looseCookies = cookiesOrder;
-
-cout<< "Your total comes up to " << dozenCount<< "\n"
-<< " dozens"<< "\n"
-<< "and " <<"\n"
-<<looseCookies <<"\n"
-"loose cookies"<< endl;
-
-cout << "There is a total of " << chocoChips << "chocolate chips "<< endl;
-cout<< "Would you like to repeat the calculation: ";
-cin>> answer;
-
-
-}
-}
-while(answer=='Y'||answer=='y');
-
+        std::cout << "Would you like to calculate another order? (y/n): ";
+        if (!(std::cin >> again)) {
+            break;
+        }
+        again = static_cast<char>(std::tolower(static_cast<unsigned char>(again)));
+    }
     return 0;
-
-
-
 }

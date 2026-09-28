@@ -1,90 +1,89 @@
+// ASCII Shape Drawer
+// Author: Maria Rodriguez
+// Course: CS002 - Fundamentals of Computer Science
+//
+// Draws a filled square, a hollow square or a right triangle of asterisks
+// in a size the user chooses. Demonstrates nested loops and a menu loop.
+
 #include <iostream>
-using namespace std;
+#include <limits>
 
-
-
-int main(){  
-    int input; 
-    int rows;
-    int x;
-    int z;
-    int Option;
-    int choice;
-
-do{
-    cout<<"Welcome. Which following option would you like draw?"
-        <<"\n1 - Filled Sqaure"
-        <<"\n2 - Empty square"
-        <<"\n3 - Triangle"
-        <<"\n4 - Exit"<<endl;
-        
-        cout<<"Enter choice: ";
-        cin>>choice;
-
-    switch(choice)
-    {
-        case 1:
-    {
-    cout << "Enter number of rows for square: " ;
-    cin >> rows;
-    for(int x=0;x<rows;x++){
-
-        for(int z=0;z<rows;z++){
-            cout << "* ";
+void drawFilledSquare(int size) {
+    for (int row = 0; row < size; row++) {
+        for (int col = 0; col < size; col++) {
+            std::cout << "* ";
         }
-         cout <<endl;
+        std::cout << '\n';
     }
+}
+
+void drawHollowSquare(int size) {
+    for (int row = 1; row <= size; row++) {
+        for (int col = 1; col <= size; col++) {
+            bool onEdge = row == 1 || row == size || col == 1 || col == size;
+            std::cout << (onEdge ? "* " : "  ");
+        }
+        std::cout << '\n';
     }
-    break;
+}
 
-    case 2:
-    {
-    cout<< "Enter number of rows for empty square";
-    cin >> rows;
+void drawTriangle(int size) {
+    for (int row = 1; row <= size; row++) {
+        for (int col = 1; col <= row; col++) {
+            std::cout << "* ";
+        }
+        std::cout << '\n';
+    }
+}
 
-      for(int x=1; x<=rows; x++){
-
-        for(int z=1; z<=rows; z++){
-            if(x==1 | x==rows | z==1 | z==rows){
-                cout<<("*");
+// Reads an integer in [low, high], re-prompting on bad input.
+// Returns false at end of input.
+bool readInt(int low, int high, int& value) {
+    while (true) {
+        if (std::cin >> value) {
+            if (value >= low && value <= high) {
+                return true;
             }
-            else{
-                cout<<" ";
-            }
+        } else if (std::cin.eof()) {
+            return false;
+        } else {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
-        cout<<"\n";
-
+        std::cout << "Please enter a number from " << low << " to " << high << ": ";
     }
-    }
-    break;
-    
-    case 3:
-    {
-    cout << "Enter number of rows for triangle: ";
-    cin >> rows;
+}
 
-    for(int x = 1; x <= rows; ++x){
+int main() {
+    const int MAX_SIZE = 30;
 
-        for(int z = 1; z <= x; ++z)
-        {
-         cout << "* ";
+    while (true) {
+        std::cout << "\nWhich shape would you like to draw?\n"
+                  << "  1 - Filled square\n"
+                  << "  2 - Hollow square\n"
+                  << "  3 - Triangle\n"
+                  << "  4 - Exit\n"
+                  << "Enter choice: ";
+
+        int choice;
+        if (!readInt(1, 4, choice) || choice == 4) {
+            break;
         }
-        cout << "\n";
-    }
-    }
-            break;
 
-            case 4:
+        std::cout << "Enter the size (1-" << MAX_SIZE << "): ";
+        int size;
+        if (!readInt(1, MAX_SIZE, size)) {
             break;
+        }
+        std::cout << '\n';
 
-            default:
-            cout << "Not a valid choice. \n"
-                << "choose again.\n";
-            break;
+        switch (choice) {
+            case 1: drawFilledSquare(size); break;
+            case 2: drawHollowSquare(size); break;
+            case 3: drawTriangle(size); break;
+        }
     }
-    }
-while(choice != 4);
+
+    std::cout << "Goodbye!\n";
     return 0;
-
-    return 0;
-    }
+}

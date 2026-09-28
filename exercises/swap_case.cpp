@@ -1,26 +1,31 @@
+// Swap Case
+// Author: Maria Rodriguez
+// Course: CS002 - Fundamentals of Computer Science
+//
+// Reads a line of text and prints it with every uppercase letter turned
+// lowercase and every lowercase letter turned uppercase.
+
+#include <cctype>
 #include <iostream>
-using namespace std;
+#include <string>
 
-string swapCase(const string& s)
-{
-int length = s.length();
-char s2[ln];
-for (int i = 0; i < ln; i++) {
-if (s[i] >= 'a' && s[i] <= 'z')
-
-s2[i] = s[i] - 32;
-else if (s[i] >= 'A' && s[i] <= 'Z')
-
-s2[i] = s[i] + 32;
-}
-return s2;
+std::string swapCase(const std::string& text) {
+    std::string result = text;
+    for (char& c : result) {
+        unsigned char uc = static_cast<unsigned char>(c);
+        if (std::islower(uc)) {
+            c = static_cast<char>(std::toupper(uc));
+        } else if (std::isupper(uc)) {
+            c = static_cast<char>(std::tolower(uc));
+        }
+    }
+    return result;
 }
 
-int main()
-{
-string s;
-cin>>s;
-string s2=swapCase(s);
-cout << s2;
-return 0;
+int main() {
+    std::string text;
+    std::cout << "Enter text: ";
+    std::getline(std::cin, text);
+    std::cout << swapCase(text) << '\n';
+    return 0;
 }
